@@ -4,9 +4,9 @@ Module Module1
 
     Sub Main()
         Dim dice As Integer
-        dim board(100) as integer
+        dim board(100) as string
         rollingdice(dice)
-        displayboard(board)
+        displayingboard(board)
         Console.ReadKey()
     End Sub
 
