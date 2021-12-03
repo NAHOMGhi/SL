@@ -44,12 +44,11 @@ Module Module1
     End Sub
     Sub displayingboard(ByRef x() As String)
         For i = 1 To x.Length - 1
-            If x(i) <> "" Then
-                ForegroundColor = ConsoleColor.Green
+            If i <> 4 Then
+                Console.Write("[{0:00}] ", i)
             Else
-                ForegroundColor = ConsoleColor.Gray
+                Console.Write("[Ls] ")
             End If
-            Console.Write("[{0:00}] ", i)
             If i Mod 10 = 0 Then
                 Console.WriteLine()
             End If
