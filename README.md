@@ -34,6 +34,8 @@ Module Module1
             choice = Int(Console.ReadLine())
             players(counter).colour = choice
             Console.ForegroundColor = choice
+            Console.WriteLine("This is your colour")
+            Console.ForegroundColor = 15
         Next
 
     End Sub
