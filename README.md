@@ -1,7 +1,7 @@
 Imports System.Console
 Module Module1
     Public Class player ' PLayer class-stores their colour, number and place
-        Public colour As String
+        Public colour As Integer
         Public number As Integer
         Public place As Integer
     End Class
@@ -30,17 +30,10 @@ Module Module1
 
             Dim choice As String
             Dim validcolour As Boolean = True
-            Console.WriteLine("Colour : ")
-            choice = Console.ReadLine()
-            Do
-                Try
-                    Console.ForegroundColor = choice
-                    players(counter).colour = choice
-                    validcolour = True
-                Catch ex As Exception
-                    Console.WriteLine("Not a valid colour")
-                End Try
-            Loop Until validcolour = True
+            Console.WriteLine("Colour(enter any number between 1 - 10 : ")
+            choice = Int(Console.ReadLine())
+            players(counter).colour = choice
+            Console.ForegroundColor = choice
         Next
 
     End Sub
