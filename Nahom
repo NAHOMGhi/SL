@@ -5,24 +5,108 @@ Module Module1
         Public number As Integer
         Public place As Integer
     End Class
-
+    'Notes - In turn function, fix game loop to work for all players and the highlight theri position on board in display board and fix turn function
     Sub Main() 'Main function
-        createplayer()
+        Dim player1, player2, player3, player4 As New player
+        Dim players As New List(Of player)({player1, player2, player3, player4})
+        createplayer(players)
         Dim dice As Integer
         Dim board(100) As String
+
         Dim gameover = False
-        Do 'Gmae loop-where all functions will be called repeatdely as game goes on
+        Dim playersa = {1, 1, 1}
+
+        Do 'Game loop-where all functions will be called repeatdely as game goes on
 
             displayingboard(board)
+            Do
+
+                For i = 0 To players.Count() - 1
+                    Dim ns = Turn(players(i))
+                    If ns = 100 Then
+                        Console.WriteLine("Player {0} wins!", i)
+                        Return
+                    End If
+
+                    Console.WriteLine()
+                Next
+            Loop
+
+
 
         Loop Until gameover = False ' loop until game is over/finishes
         Console.ReadKey()
     End Sub
+
+    Dim SNL As New Dictionary(Of Integer, Integer) From {
+       {4, 14},
+       {9, 31},
+       {17, 7},
+       {20, 38},
+       {28, 84},
+       {40, 59},
+       {51, 67},
+       {54, 34},
+       {62, 19},
+       {63, 81},
+       {64, 60},
+       {71, 91},
+       {87, 24},
+       {93, 73},
+       {95, 75},
+       {99, 78}
+   }
+    Dim rand As New Random
+    Const sixesThrowAgain = True
+
+    Function Turn(ByVal player As Object) As Integer
+
+        Console.ReadKey()
+        Dim square As Integer
+        square = player.place
+        Dim roll = rand.Next(1, 6)
+        Console.Write("Player {0}, on square {1}, rolls a {2}", player, square, roll)
+        If square + roll > 100 Then
+            Console.WriteLine(" but cannot move.")
+        Else
+            square += roll
+            Console.WriteLine(" and moves to square {0}", square)
+            If square = 100 Then
+                Return 100
+                player.place = square
+            End If
+
+            Dim nxt = square
+            If SNL.ContainsKey(square) Then
+                nxt = SNL(nxt)
+            End If
+            If square < nxt Then
+                Console.WriteLine("Yay! Landed on a ladder. Climb up to {0}.", nxt)
+                If nxt = 100 Then
+                    Return 100
+                    player.place = square
+                End If
+                square = nxt
+            ElseIf square > nxt Then
+                Console.WriteLine("Oops! Landed on a snake. Slither down to {0}.", nxt)
+                square = nxt
+
+            End If
+        End If
+
+        If roll < 6 OrElse Not sixesThrowAgain Then
+            player.place = square
+        End If
+        Console.WriteLine("Rolled a 6 so roll again.")
+        player.place = square
+
+
+    End Function
     'I removed the rolling dice function and instead added it within move sub
 
-    Sub createplayer() 'Creates new players via the class then assigns them their place on the baord(0)
-        Dim player1, player2, player3, player4 As New player
-        Dim players As New List(Of player)({player1, player2, player3, player4})
+    Sub createplayer(ByRef players As Object) 'Creates new players via the class then assigns them their place on the baord(0)
+
+
         For counter = 0 To 3
 
             players(counter).place = 0
@@ -47,7 +131,13 @@ Module Module1
 
 
     End Sub
-    Sub displayingboard(ByRef x() As String)
+    Sub displayingboard(ByRef x() As String, ByRef players As List(Of Object))
+        Dim a As String
+        For i = 0 To players.Count
+            a = players(i).place
+            'a variable is the place of the player. Here is an example for loop through the list to get the place of each player.Make it so that it shows where you are by changing colour using the place.
+
+        Next
         For i = 1 To x.Length - 1
             If x(i) <> "" Then
                 ForegroundColor = ConsoleColor.Green
@@ -63,5 +153,3 @@ Module Module1
 
     End Sub
 
-
-End Module
