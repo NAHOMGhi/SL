@@ -16,25 +16,27 @@ Module Module1
         Dim gameover = False
         Dim playersa = {1, 1, 1}
 
+
         Do 'Game loop-where all functions will be called repeatdely as game goes on
+            Console.ReadKey()
             Console.Clear()
             displayingboard(board, players)
-            Do
-
-                For i = 0 To players.Count() - 1
-                    Dim ns = Turn(players(i))
-                    If ns = 100 Then
-                        Console.WriteLine("Player {0} wins!", i)
-                        Return
-                    End If
-
-                    Console.WriteLine()
-                Next
-            Loop
 
 
+            For i = 0 To players.Count() - 1
+                Dim ns = Turn(players(i))
+                If ns = 100 Then
+                    Console.WriteLine("Player {0} wins!", i)
+                    Return
+                End If
 
-        Loop Until gameover = False ' loop until game is over/finishes
+                Console.WriteLine()
+            Next
+
+
+
+
+        Loop
         Console.ReadKey()
     End Sub
 
@@ -60,60 +62,58 @@ Module Module1
     Const sixesThrowAgain = True
 
     Function Turn(ByVal player As Object) As Integer
-
-        Console.ReadKey()
-        Dim square As Integer
-        square = player.place
-        Dim roll = rand.Next(1, 6)
-
-        Console.ForegroundColor = player.Colour
-        Console.Write("{0}, on square {1}, rolls a {2}", player.name, square, roll)
-
-        If square + roll > 100 Then
-            Console.WriteLine(" but cannot move.")
-        Else
-
-            square += roll
-            Console.WriteLine(" and moves to square {0}", square)
-            If square = 100 Then
-                Return 100
-                player.place = square
-                Return player.place
-            End If
-
-            Dim nxt = square
-            If SNL.ContainsKey(square) Then
-                nxt = SNL(nxt)
-            End If
-
-            If square < nxt Then
-                Console.WriteLine("Yay! Landed on a ladder. Climb up to {0}.", nxt)
-                If nxt = 100 Then
+        Dim roll6 As Boolean = False
+        Do
+            Console.ReadKey()
+            Dim square As Integer
+            square = player.place
+            Dim roll = rand.Next(1, 6)
+            Console.ForegroundColor = player.Colour
+            Console.Write("{0}, on square {1}, rolls a {2}", player.name, square, roll)
+            If square + roll > 100 Then
+                Console.WriteLine(" but cannot move.")
+            Else
+                square += roll
+                Console.WriteLine(" and moves to square {0}", square)
+                If square = 100 Then
                     Return 100
                     player.place = square
                 End If
-                square = nxt
-            ElseIf square > nxt Then
-                Console.WriteLine("Oops! Landed on a snake. Slither down to {0}.", nxt)
-                square = nxt
+
+                Dim nxt = square
+                If SNL.ContainsKey(square) Then
+                    nxt = SNL(nxt)
+                End If
+                If square < nxt Then
+                    Console.WriteLine("Yay! Landed on a ladder. Climb up to {0}.", nxt)
+                    If nxt = 100 Then
+                        Return 100
+                        player.place = square
+                    End If
+                    square = nxt
+                ElseIf square > nxt Then
+                    Console.WriteLine("Oops! Landed on a snake. Slither down to {0}.", nxt)
+                    square = nxt
+
+                End If
             End If
-        End If
 
-        If roll < 6 OrElse Not sixesThrowAgain Then
-            player.place = square
-            Console.WriteLine("Rolled a 6 so roll again.")
-            player.place = square
-            Return square
+            If roll < 6 OrElse Not sixesThrowAgain Then
+                player.place = square
+            End If
 
-        End If
+            If roll = 6 Then
+                Console.WriteLine("Rolled a 6 so roll again.")
+                player.place = square
+                roll6 = True
+            End If
 
-        Console.ReadKey()
+        Loop Until roll6 = False
+
     End Function
     'I removed the rolling dice function and instead added it within move sub
 
     Sub createplayer(ByRef players As Object) 'Creates new players via the class then assigns them their place on the baord(0)
-
-
         For counter = 0 To 3
             Console.WriteLine("What is your Name")
             players(counter).name = Console.ReadLine
@@ -144,22 +144,23 @@ Module Module1
         Next
 
     End Sub
-
     Sub displayingboard(ByRef x() As String, ByRef players As List(Of player))
         Dim a As String
-        For i = 0 To players.Count - 1
-            a = players(i).place
-            'a variable is the place of the player. Here is an example for loop through the list to get the place of each player.Make it so that it shows where you are by changing colour using the place.
 
-        Next
-        For i = 1 To x.Length - 1
-            If x(i) <> "" Then
-                ForegroundColor = ConsoleColor.Green
-            Else
-                ForegroundColor = ConsoleColor.Gray
-            End If
-            Console.Write("[{0:00}] ", i)
-            If i Mod 10 = 0 Then
+        For j = 1 To x.Length - 1
+            For i = 0 To players.Count - 1
+                a = players(i).place
+
+                'a variable is the place of the player. Here is an example for loop through the list to get the place of each player.
+                'Make it so that it shows where you are by changing colour using the place.
+                If a = x(j) Then
+                    Console.ForegroundColor = players(i).colour
+                Else
+                    Console.ForegroundColor = ConsoleColor.White
+                End If
+            Next
+            Console.Write("[{0:00}] ", j)
+            If j Mod 10 = 0 Then
                 Console.WriteLine()
             End If
         Next
