@@ -18,7 +18,7 @@ Module Module1
 
         Do 'Game loop-where all functions will be called repeatdely as game goes on
 
-            displayingboard(board)
+            displayingboard(board, players)
             Do
 
                 For i = 0 To players.Count() - 1
@@ -131,7 +131,7 @@ Module Module1
 
 
     End Sub
-    Sub displayingboard(ByRef x() As String, ByRef players As List(Of Object))
+    Sub displayingboard(ByRef x() As String, ByRef players As List(Of player))
         Dim a As String
         For i = 0 To players.Count
             a = players(i).place
@@ -153,3 +153,5 @@ Module Module1
 
     End Sub
 
+
+End Module
