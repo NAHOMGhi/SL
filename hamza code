@@ -8,8 +8,9 @@ Module Module1
 
     Sub Main() 'Main function
         createplayer()
-        Dim dice As Integer
+
         Dim board(100) As String
+
 
         Dim gameover = False
         Dim players = {1, 1, 1}
@@ -17,12 +18,16 @@ Module Module1
         Do 'Game loop-where all functions will be called repeatdely as game goes on
 
             displayingboard(board)
+
+
             Do
 
                 For i = 1 To players.Length
                     Dim ns = Turn(i, players(i - 1))
                     If ns = 100 Then
+                        Console.Clear()
                         Console.WriteLine("Player {0} wins!", i)
+                        gameover = True
                         Return
                     End If
                     players(i - 1) = ns
@@ -32,7 +37,7 @@ Module Module1
 
 
 
-        Loop Until gameover = False ' loop until game is over/finishes
+        Loop Until gameover = True ' loop until game is over/finishes
         Console.ReadKey()
     End Sub
 
@@ -56,6 +61,7 @@ Module Module1
    }
     Dim rand As New Random
     Const sixesThrowAgain = True
+    Dim playerPlace As Integer
 
     Function Turn(ByVal player As Integer, square As Integer) As Integer
         Do
@@ -67,6 +73,7 @@ Module Module1
             Else
                 square += roll
                 Console.WriteLine(" and moves to square {0}", square)
+
                 If square = 100 Then
                     Return 100
                 End If
@@ -91,10 +98,17 @@ Module Module1
                 Return square
             End If
             Console.WriteLine("Rolled a 6 so roll again.")
-        Loop
-    End Function
-    'I removed the rolling dice function and instead added it within move sub
 
+            Console.ReadKey()
+        Loop
+        Console.ReadKey()
+    End Function
+
+
+
+
+
+    'I removed the rolling dice function and instead added it within move s
     Sub createplayer() 'Creates new players via the class then assigns them their place on the baord(0)
         Dim player1, player2, player3, player4 As New player
         Dim players As New List(Of player)({player1, player2, player3, player4})
@@ -105,12 +119,14 @@ Module Module1
 
             Dim choice As String
             Dim validcolour As Boolean = True
-            Console.WriteLine("Colour(enter any number between 1 - 10 : ")
+            Console.WriteLine("Colour - Enter any number between 1 - 10 : ")
             choice = Int(Console.ReadLine())
             players(counter).colour = choice
             Console.ForegroundColor = choice
+            Console.WriteLine("Player 1 colour")
         Next
-
+        Console.ReadKey()
+        Console.Clear()
 
     End Sub
 
@@ -129,4 +145,7 @@ Module Module1
         Console.WriteLine()
 
     End Sub
+
+
+
 End Module
