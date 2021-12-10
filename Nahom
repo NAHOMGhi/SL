@@ -106,31 +106,24 @@ Module Module1
     End Function
     'I removed the rolling dice function and instead added it within move sub
 
-    Sub createplayer(ByRef players As Object) 'Creates new players via the class then assigns them their place on the baord(0)
+   Sub createplayer(ByRef players As Object) 'Creates new players via the class then assigns them their place on the baord(0)
 
-       
+
         For counter = 0 To 3
-
+            Console.WriteLine("What is your Name")
+            players(counter).name = Console.ReadLine
             players(counter).place = 0
             players(counter).number = counter + 1
 
-            Dim choice As String, x As Integer
+            Dim choice As String
             Dim validcolour As Boolean = True
-            Do
-                Console.WriteLine("Colour(enter any number between 1 - 10 : ")
-                choice = Console.ReadLine()
-
-
-                If (Integer.TryParse(choice, x)) Then
-                    players(counter).colour = choice
-                    Console.ForegroundColor = choice
-                    Console.WriteLine("This is your colour")
-                    Console.ForegroundColor = 15
-                Else
-                    Console.WriteLine("Input was not a number")
-                End If
-            Loop While Int32.TryParse(choice, x) = False
-        Next       
+            Console.WriteLine("Colour(enter any number between 1 - 10 : ")
+            choice = Int(Console.ReadLine())
+            players(counter).colour = choice
+            Console.ForegroundColor = choice
+            Console.WriteLine("This is your colour")
+            Console.ForegroundColor = 15
+        Next
 
     End Sub
  
